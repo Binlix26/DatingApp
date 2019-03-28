@@ -32,6 +32,8 @@ namespace DatingApp.API
                 x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
+            // services.AddSingleton() can cause issue when concurrency
+            services.AddScoped<IAuthRepository, AuthRepository>(); // similar to singleton, one instance for each HTTP request.
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,7 +50,7 @@ namespace DatingApp.API
 
 //            app.UseHttpsRedirection();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyMethod());
-            app.UseMvc();
+            app.UseMvc(); // order matters
         }
     }
 }
