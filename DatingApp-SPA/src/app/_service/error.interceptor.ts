@@ -3,6 +3,11 @@ import {HTTP_INTERCEPTORS, HttpErrorResponse, HttpEvent, HttpHandler, HttpInterc
 import {Observable, throwError} from 'rxjs';
 import {catchError} from 'rxjs/operators';
 
+/**
+ * Handle => server side error, server internal error
+ * Handle => server side error, registration validation error
+ * Handle => 401, log in incorrect credential error
+ */
 @Injectable()
 export class ErrorInterceptor implements HttpInterceptor {
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
