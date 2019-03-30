@@ -1,8 +1,12 @@
-﻿using System.Text;
+﻿using System.Net;
+using System.Text;
 using DatingApp.API.Data;
+using DatingApp.API.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -53,10 +57,28 @@ namespace DatingApp.API
         {
             if (env.IsDevelopment())
             {
+                // reason of developer exception page when there is unhandled exception
                 app.UseDeveloperExceptionPage();
             }
             else
             {
+                // add middleware to the pipeline to handler the exception (server error, 500 etc)
+                // builder is a configuration, handler can go without configuration
+                app.UseExceptionHandler(builder =>
+                {
+                    // context is based on http request
+                    builder.Run(async context =>
+                    {
+                        context.Response.StatusCode = (int) HttpStatusCode.InternalServerError;
+
+                        var error = context.Features.Get<IExceptionHandlerFeature>();
+                        if (error != null)
+                        {
+                            context.Response.AddApplicationError(error.Error.Message);
+                            await context.Response.WriteAsync(error.Error.Message);
+                        }
+                    });
+                });
 //                app.UseHsts();
             }
 

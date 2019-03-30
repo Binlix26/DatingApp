@@ -51,7 +51,7 @@ namespace DatingApp.API.Controllers
             var userFromRepo = await _repo.Login(userForLoginDto.Username.ToLower(), userForLoginDto.Password);
 
             if (userFromRepo == null)
-                return Unauthorized();
+                return Unauthorized(); // incorrect credential
 
             // store the information (claim), 
             var claims = new[]
@@ -59,8 +59,8 @@ namespace DatingApp.API.Controllers
                 new Claim(ClaimTypes.NameIdentifier, userFromRepo.Id.ToString()),
                 new Claim(ClaimTypes.Name, userFromRepo.Username.ToString())
             };
-            
-            // generate the key used to encrypt and validate the toekn
+
+            // generate the key used to encrypt and validate the token
             var key = new SymmetricSecurityKey(Encoding.UTF8
                 .GetBytes(_config.GetSection("AppSettings:Token").Value));
 
@@ -81,6 +81,8 @@ namespace DatingApp.API.Controllers
             {
                 token = tokenHandler.WriteToken(token)
             });
+
+//                return StatusCode(500, "Computer says no");
         }
     }
 }
