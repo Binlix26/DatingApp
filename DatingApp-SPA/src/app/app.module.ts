@@ -1,7 +1,7 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {NgModule} from '@angular/core';
 
-import {AppRoutingModule} from './app-routing.module';
+import {AppRouting} from './app.routing';
 import {AppComponent} from './app.component';
 import {HttpClientModule} from '@angular/common/http';
 import {NavComponent} from './nav/nav.component';
@@ -12,19 +12,25 @@ import {RegisterComponent} from './register/register.component';
 import {ErrorInterceptorProvider} from './_service/error.interceptor';
 import {AlertifyService} from './_service/alertify.service';
 import {BsDropdownModule} from 'ngx-bootstrap';
+import { MemberListComponent } from './member-list/member-list.component';
+import { ListsComponent } from './lists/lists.component';
+import { MessagesComponent } from './messages/messages.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     NavComponent,
     HomeComponent,
-    RegisterComponent
+    RegisterComponent,
+    MemberListComponent,
+    ListsComponent,
+    MessagesComponent
   ],
   imports: [
     BrowserModule,
     FormsModule,
     HttpClientModule,
-    AppRoutingModule,
+    AppRouting,
     BsDropdownModule.forRoot()
   ],
   providers: [
