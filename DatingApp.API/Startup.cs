@@ -32,7 +32,8 @@ namespace DatingApp.API
                 x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
             services.AddCors();
-
+            services.AddTransient<Seed>();
+            
             // services.AddSingleton() can cause issue when concurrency
             // similar to singleton, one instance for each HTTP request.
             services.AddScoped<IAuthRepository, AuthRepository>();
@@ -53,7 +54,7 @@ namespace DatingApp.API
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, Seed seeder)
         {
             if (env.IsDevelopment())
             {
@@ -83,6 +84,7 @@ namespace DatingApp.API
             }
 
 //            app.UseHttpsRedirection();
+//            seeder.SeedUsers(); it is only used when necessary
             app.UseAuthentication();
             app.UseCors(x => x.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
             app.UseMvc(); // order matters
