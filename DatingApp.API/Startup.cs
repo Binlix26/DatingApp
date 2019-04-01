@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Text;
+using AutoMapper;
 using DatingApp.API.Data;
+using DatingApp.API.Data.Impl;
 using DatingApp.API.Helpers;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -39,6 +41,7 @@ namespace DatingApp.API
                         = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
                 });
             services.AddCors();
+            services.AddAutoMapper(); // inject auto mapper
             services.AddTransient<Seed>();
 
             // services.AddSingleton() can cause issue when concurrency
