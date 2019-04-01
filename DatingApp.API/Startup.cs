@@ -30,13 +30,22 @@ namespace DatingApp.API
             // add database connection
             services.AddDbContext<DataContext>(x =>
                 x.UseSqlite(Configuration.GetConnectionString("DefaultConnection")));
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+                // TODO quick fix to get Json response and will fix ReferenceLoopHandling later
+                .AddJsonOptions(opt =>
+                {
+                   
+                    opt.SerializerSettings.ReferenceLoopHandling
+                        = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                });
             services.AddCors();
             services.AddTransient<Seed>();
-            
+
             // services.AddSingleton() can cause issue when concurrency
             // similar to singleton, one instance for each HTTP request.
+            // specify Interface and its implementation
             services.AddScoped<IAuthRepository, AuthRepository>();
+            services.AddScoped<IDatingRepository, DatingRepository>();
             // add authentication middleware
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
