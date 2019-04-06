@@ -58,7 +58,7 @@ namespace DatingApp.API
                         ValidateIssuerSigningKey = true,
                         IssuerSigningKey =
                             new SymmetricSecurityKey(
-                                Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                                Encoding.UTF8.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
                         ValidateIssuer = false, // it is localhost for now
                         ValidateAudience = false // it is localhost for now
                     };

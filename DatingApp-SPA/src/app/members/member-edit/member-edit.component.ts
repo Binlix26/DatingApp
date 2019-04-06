@@ -3,6 +3,8 @@ import {User} from '../../_models/user';
 import {ActivatedRoute} from '@angular/router';
 import {AlertifyService} from '../../_service/alertify.service';
 import {NgForm} from '@angular/forms';
+import {UserService} from '../../_service/user.service';
+import {AuthService} from '../../_service/auth.service';
 
 @Component({
   selector: 'app-member-edit',
@@ -23,7 +25,9 @@ export class MemberEditComponent implements OnInit {
 
   constructor(
     private activatedRoute: ActivatedRoute,
-    private alertify: AlertifyService
+    private alertify: AlertifyService,
+    private userService: UserService,
+    private authService: AuthService
   ) {
   }
 
@@ -35,8 +39,12 @@ export class MemberEditComponent implements OnInit {
   }
 
   updateUser() {
-    console.log(this.user);
-    this.alertify.success('Profile updated successfully');
-    this.editForm.reset(this.user);
+    this.userService.updateUser(this.authService.decodedToken.nameid, this.user).subscribe(
+      next => {
+        this.alertify.success('Profile updated successfully');
+        this.editForm.reset(this.user);
+      }, error => {
+        this.alertify.error(error);
+      });
   }
 }
