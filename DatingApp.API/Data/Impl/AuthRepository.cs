@@ -45,7 +45,7 @@ namespace DatingApp.API.Data.Impl
         {
             //  _context.Users.FirstAsync() would throw exceptions if the user is not found
             // as opposed the one is used that would return null
-            var user = await _context.Users.FirstOrDefaultAsync(x =>
+            var user = await _context.Users.Include(p => p.Photos).FirstOrDefaultAsync(x =>
                 x.Username.Equals(username, StringComparison.OrdinalIgnoreCase));
 
             if (user == null)
