@@ -101,7 +101,7 @@ namespace DatingApp.API.Controllers
 
             return BadRequest("Could not add the photo");
         }
-        
+
         [HttpPost("{id}/setMain")]
         public async Task<IActionResult> SetMainPhoto(int userId, int id)
         {
@@ -109,7 +109,7 @@ namespace DatingApp.API.Controllers
                 return Unauthorized();
 
             var user = await _repo.GetUser(userId);
-            
+
             // check if photo exits
             if (user.Photos.All(p => p.Id != id))
                 return Unauthorized();
@@ -128,6 +128,48 @@ namespace DatingApp.API.Controllers
                 return NoContent();
 
             return BadRequest("Could not set photo to main");
+        }
+
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeletePhoto(int userId, int id)
+        {
+            if (userId != int.Parse(User.FindFirst(ClaimTypes.NameIdentifier).Value))
+                return Unauthorized();
+
+            var user = await _repo.GetUser(userId);
+
+            if (user.Photos.All(p => p.Id != id))
+                return Unauthorized();
+
+            var photoFromRepo = await _repo.GetPhoto(id);
+
+            if (photoFromRepo.IsMain)
+                return BadRequest("You cannot delete your main photo");
+
+            // delete from cloudinary
+            if (photoFromRepo.PublicId != null)
+            {
+                var deleteParams = new DeletionParams(photoFromRepo.PublicId);
+
+                var result = _cloudinary.Destroy(deleteParams);
+
+                if (result.Result == "ok")
+                {
+                    // then delete the row from Photo table
+                    _repo.Delete(photoFromRepo);
+                }
+            }
+
+            if (photoFromRepo.PublicId == null)
+            {
+                // delete the photos that do not go through cloudinary
+                _repo.Delete(photoFromRepo);
+            }
+
+            if (await _repo.SaveAll())
+                return Ok();
+
+            return BadRequest("Failed to delete the photo");
         }
     }
 }
