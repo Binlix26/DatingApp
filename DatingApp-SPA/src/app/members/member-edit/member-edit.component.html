@@ -33,12 +33,12 @@ Resolver is a solution to this
 
           <div>
             <strong>Last Active: </strong>
-            <p>{{user.lastActive}}</p>
+            <p>{{user.lastActive | timeAgo}}</p>
           </div>
 
           <div>
             <strong>Member Since: </strong>
-            <p>{{user.created}}</p>
+            <p>{{user.created | date}}</p>
           </div>
         </div>
 
