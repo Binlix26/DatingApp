@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using DatingApp.API.Helpers;
 using DatingApp.API.Models;
@@ -131,11 +130,6 @@ namespace DatingApp.API.Data.Impl
             messages = messages.OrderByDescending(m => m.MessageSent);
 
             return await PagedList<Message>.CreateAsync(messages, messageParams.PageNumber, messageParams.PageSize);
-        }
-
-        public Task<PagedList<Message>> GetMessagesForUser()
-        {
-            throw new NotImplementedException();
         }
 
         public Task<IEnumerable<Message>> GetMessageThread(int userId, int recipientId)
