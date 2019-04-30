@@ -116,12 +116,12 @@ namespace DatingApp.API.Data.Impl
 
             if (likers)
             {
-                // return the list of uses who like this logged in user
+                // return the list of users who like this logged in user
                 return user.Likers.Where(u => u.LikeeId == id).Select(i => i.LikerId);
             }
             else
             {
-                // return the list of uses whom this logged in user likes
+                // return the list of users whom this logged in user likes
                 return user.Likees.Where((u => u.LikerId == id)).Select(i => i.LikeeId);
             }
         }
