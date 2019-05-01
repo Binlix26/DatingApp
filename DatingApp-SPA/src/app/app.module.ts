@@ -11,7 +11,7 @@ import {HomeComponent} from './home/home.component';
 import {RegisterComponent} from './register/register.component';
 import {ErrorInterceptorProvider} from './_service/error.interceptor';
 import {AlertifyService} from './_service/alertify.service';
-import {BsDatepickerModule, BsDropdownModule, ButtonsModule, PaginationModule, TabsModule} from 'ngx-bootstrap';
+import {BsDatepickerModule, BsDropdownModule, ButtonsModule, CollapseModule, PaginationModule, TabsModule} from 'ngx-bootstrap';
 import {MemberListComponent} from './members/member-list/member-list.component';
 import {ListsComponent} from './lists/lists.component';
 import {MessagesComponent} from './messages/messages.component';
@@ -29,6 +29,8 @@ import {PhotoEditorComponent} from './members/photo-editor/photo-editor.componen
 import {FileUploadModule} from 'ng2-file-upload';
 import {TimeAgoPipe} from 'time-ago-pipe';
 import {ListsResolver} from './_resolvers/lists.resolver';
+import {MessagesResolver} from './_resolvers/messages.resolver';
+import { MemberMessagesComponent } from './members/member-messages/member-messages.component';
 
 export function tokenGetter() {
   return localStorage.getItem('token');
@@ -47,7 +49,8 @@ export function tokenGetter() {
     MemberDetailComponent,
     MemberEditComponent,
     PhotoEditorComponent,
-    TimeAgoPipe
+    TimeAgoPipe,
+    MemberMessagesComponent
   ],
   imports: [
     BrowserModule,
@@ -68,7 +71,8 @@ export function tokenGetter() {
       }
     }),
     NgxGalleryModule,
-    FileUploadModule
+    FileUploadModule,
+    CollapseModule
   ],
   providers: [
     AuthService,
@@ -79,7 +83,8 @@ export function tokenGetter() {
     PreventUnsavedChangesGuard,
     MemberDetailResolver,
     MemberListResolver,
-    ListsResolver
+    ListsResolver,
+    MessagesResolver
   ],
   bootstrap: [AppComponent]
 })
